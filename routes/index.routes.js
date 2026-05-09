@@ -1,16 +1,18 @@
-const express = require("express");
+﻿import { Router } from 'express';
+import youtubeRoutes from './youtube.routes.js';
 
-const worldBankRoutes = require("./worldbank.routes");
+const indexRoutes = Router();
 
-const router = express.Router();
-
-router.get("/", (req, res) => {
+indexRoutes.get('/', (req, res) => {
   res.status(200).json({
     success: true,
-    message: "World Bank API backend funcionando",
+    message: 'API YouTube Backend funcionando correctamente',
+    endpoints: {
+      youtube: '/api/youtube'
+    }
   });
 });
 
-router.use("/api/worldbank", worldBankRoutes);
+indexRoutes.use('/youtube', youtubeRoutes);
 
-module.exports = router;
+export default indexRoutes;

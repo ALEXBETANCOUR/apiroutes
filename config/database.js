@@ -1,34 +1,16 @@
-const mongoose = require("mongoose");
+﻿import mongoose from 'mongoose';
 
-async function connectDB() {
+const conectarMongoDB = async () => {
   try {
-    const mongoUri = process.env.MONGO_URI;
+    const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/YoutubeBackend';
 
-    if (!mongoUri) {
-      throw new Error("No existe MONGO_URI en el archivo .env");
-    }
+    await mongoose.connect(mongoUri);
 
-    mongoose.set("strictQuery", true);
-
-    await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 15000,
-    });
-
-    console.log("MongoDB conectado correctamente");
+    console.log('Conexion a MongoDB exitosa');
   } catch (error) {
-    console.error("Error al conectar con MongoDB:", error.message);
-    throw error;
+    console.error('Error al conectar con MongoDB:', error.message);
+    process.exit(1);
   }
-}
+};
 
-mongoose.connection.on("disconnected", () => {
-  console.log("MongoDB desconectado");
-});
-
-process.on("SIGINT", async () => {
-  await mongoose.connection.close();
-  console.log("Conexion MongoDB cerrada");
-  process.exit(0);
-});
-
-module.exports = connectDB;
+export { conectarMongoDB };
