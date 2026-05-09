@@ -1,0 +1,25 @@
+{
+  "name": "apiroutes",
+  "version": "1.0.0",
+  "description": "Proyecto Node.js + Express + MongoDB + World Bank API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo No tests configured",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "axios": "^1.16.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
