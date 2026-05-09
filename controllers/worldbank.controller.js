@@ -9,9 +9,14 @@ const DATE_REGEX = /^\d{4}(:\d{4})?$/;
 
 function getEnvConfig() {
   const parsedPerPage = Number.parseInt(process.env.DEFAULT_PER_PAGE || "300", 10);
+  const baseUrl = String(process.env.WORLD_BANK_BASE_URL || "").trim().replace(/\/+$/, "");
+
+  if (!baseUrl) {
+    throw buildError("No existe WORLD_BANK_BASE_URL en el archivo .env", 500);
+  }
 
   return {
-    baseUrl: String(process.env.WORLD_BANK_BASE_URL || "https://api.worldbank.org/v2").replace(/\/+$/, ""),
+    baseUrl,
     defaultCountry: String(process.env.DEFAULT_COUNTRY || "EC").trim().toUpperCase(),
     defaultIndicator: String(process.env.DEFAULT_INDICATOR || "SP.POP.TOTL").trim().toUpperCase(),
     defaultFormat: String(process.env.DEFAULT_FORMAT || "json").trim().toLowerCase(),

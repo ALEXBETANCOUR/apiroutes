@@ -2,11 +2,11 @@
   "name": "apiroutes",
   "version": "1.0.0",
   "description": "Proyecto Node.js + Express + MongoDB + World Bank API",
-  "main": "index.js",
+  "main": "server/server.js",
   "scripts": {
     "test": "echo No tests configured",
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
   },
   "keywords": [],
   "author": "",

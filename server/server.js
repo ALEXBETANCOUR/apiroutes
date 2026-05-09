@@ -1,22 +1,22 @@
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
+const dotenv = require("dotenv");
 
-const indexRoutes = require("../routes/index.routes");
+dotenv.config();
 
-const app = express();
+const app = require("../app");
+const connectDB = require("../config/database");
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use("/", indexRoutes);
-app.use(express.static(path.join(__dirname, "..", "public")));
+const PORT = Number(process.env.PORT) || 3000;
 
-app.use("/api", (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: "Endpoint no encontrado",
-  });
-});
+async function startServer() {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Servidor escuchando en http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("Error al iniciar el servidor:", error.message);
+    process.exit(1);
+  }
+}
 
-module.exports = app;
+startServer();
