@@ -1,60 +1,87 @@
-﻿import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 const youtubeSchema = new mongoose.Schema(
   {
-    nombreEmpresa: {
+    nombreCanal: {
       type: String,
-      required: [true, 'El nombre de la empresa es obligatorio'],
+      required: [true, 'El nombre del canal es obligatorio'],
+      trim: true
+    },
+    creadorPrincipal: {
+      type: String,
+      required: [true, 'El creador principal es obligatorio'],
+      trim: true
+    },
+    categoria: {
+      type: String,
+      required: [true, 'La categoria del canal es obligatoria'],
       trim: true,
-      default: 'YouTube'
-    },
-    industria: {
-      type: String,
-      required: [true, 'La industria es obligatoria'],
-      trim: true
-    },
-    sede: {
-      type: String,
-      required: [true, 'La sede es obligatoria'],
-      trim: true
+      enum: [
+        'Educacion',
+        'Tecnologia',
+        'Entretenimiento',
+        'Musica',
+        'Gaming',
+        'Deportes',
+        'Noticias',
+        'Estilo de vida'
+      ]
     },
     pais: {
       type: String,
       required: [true, 'El pais es obligatorio'],
       trim: true
     },
+    idiomaPrincipal: {
+      type: String,
+      required: [true, 'El idioma principal es obligatorio'],
+      trim: true
+    },
+    suscriptores: {
+      type: Number,
+      required: [true, 'La cantidad de suscriptores es obligatoria'],
+      min: [0, 'Los suscriptores no pueden ser negativos']
+    },
+    videosPublicados: {
+      type: Number,
+      required: [true, 'La cantidad de videos publicados es obligatoria'],
+      min: [0, 'Los videos publicados no pueden ser negativos']
+    },
+    visualizacionesMensuales: {
+      type: Number,
+      required: [true, 'Las visualizaciones mensuales son obligatorias'],
+      min: [0, 'Las visualizaciones mensuales no pueden ser negativas']
+    },
+    promedioDuracionVideo: {
+      type: Number,
+      required: [true, 'El promedio de duracion del video es obligatorio'],
+      min: [1, 'La duracion promedio debe ser mayor a 0']
+    },
+    estadoMonetizacion: {
+      type: String,
+      required: [true, 'El estado de monetizacion es obligatorio'],
+      enum: ['Activa', 'Pendiente', 'Suspendida', 'No monetizado'],
+      default: 'No monetizado'
+    },
+    verificado: {
+      type: Boolean,
+      default: false
+    },
+    enlaceCanal: {
+      type: String,
+      required: [true, 'El enlace del canal es obligatorio'],
+      trim: true
+    },
     descripcion: {
       type: String,
       required: [true, 'La descripcion es obligatoria'],
-      trim: true
-    },
-    sitioWeb: {
-      type: String,
-      required: [true, 'El sitio web es obligatorio'],
-      trim: true
-    },
-    numeroEmpleados: {
-      type: Number,
-      required: [true, 'El numero de empleados es obligatorio'],
-      min: [0, 'El numero de empleados no puede ser negativo']
-    },
-    ingresosAnuales: {
-      type: Number,
-      required: [true, 'Los ingresos anuales son obligatorios'],
-      min: [0, 'Los ingresos anuales no pueden ser negativos']
-    },
-    estado: {
-      type: String,
-      enum: ['Activa', 'Inactiva', 'En expansion', 'En expansi\u00f3n'],
-      default: 'Activa'
-    },
-    fechaFundacion: {
-      type: Date,
-      required: [true, 'La fecha de fundacion es obligatoria']
+      trim: true,
+      minlength: [10, 'La descripcion debe tener al menos 10 caracteres']
     }
   },
   {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
   }
 );
 

@@ -1,20 +1,18 @@
-﻿import { Router } from 'express';
+import { Router } from 'express';
 import {
-  getAllYoutubeCompanies,
-  getYoutubeCompanyById,
-  postYoutubeCompany,
-  putYoutubeCompany,
-  deleteYoutubeCompany,
-  getYoutubeCompaniesByCountry
+  getYoutubeRecords,
+  getYoutubeRecordById,
+  createYoutubeRecord,
+  updateYoutubeRecord,
+  deleteYoutubeRecord
 } from '../controllers/youtube.controllers.js';
 
 const router = Router();
 
-router.get('/', getAllYoutubeCompanies);
-router.post('/', postYoutubeCompany);
-router.get('/pais/:pais', getYoutubeCompaniesByCountry);
-router.get('/:id', getYoutubeCompanyById);
-router.put('/:id', putYoutubeCompany);
-router.delete('/:id', deleteYoutubeCompany);
+router.get('/', getYoutubeRecords);
+router.get('/:id', getYoutubeRecordById);
+router.post('/', createYoutubeRecord);
+router.put('/:id', updateYoutubeRecord);
+router.delete('/:id', deleteYoutubeRecord);
 
 export default router;

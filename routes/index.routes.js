@@ -1,18 +1,8 @@
-﻿import { Router } from 'express';
+import { Router } from 'express';
 import youtubeRoutes from './youtube.routes.js';
 
-const indexRoutes = Router();
+const router = Router();
 
-indexRoutes.get('/', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'API YouTube Backend funcionando correctamente',
-    endpoints: {
-      youtube: '/api/youtube'
-    }
-  });
-});
+router.use('/youtube', youtubeRoutes);
 
-indexRoutes.use('/youtube', youtubeRoutes);
-
-export default indexRoutes;
+export default router;

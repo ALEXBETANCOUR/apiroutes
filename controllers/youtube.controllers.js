@@ -1,184 +1,73 @@
-﻿import mongoose from 'mongoose';
 import Youtube from '../models/youtube.model.js';
 
-const getAllYoutubeCompanies = async (req, res) => {
+export const getYoutubeRecords = async (req, res) => {
   try {
-    const registros = await Youtube.find().sort({ createdAt: -1 });
-
-    return res.status(200).json({
-      success: true,
-      count: registros.length,
-      data: registros
-    });
+    const records = await Youtube.find().sort({ createdAt: -1 });
+    res.status(200).json(records);
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: 'Error al obtener los registros de YouTube'
-    });
+    res.status(500).json({ message: 'Error al obtener los registros', error: error.message });
   }
 };
 
-const getYoutubeCompanyById = async (req, res) => {
+export const getYoutubeRecordById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const record = await Youtube.findById(req.params.id);
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({
-        success: false,
-        message: 'ID invalido'
-      });
+    if (!record) {
+      return res.status(404).json({ message: 'Registro no encontrado' });
     }
 
-    const registro = await Youtube.findById(id);
-
-    if (!registro) {
-      return res.status(404).json({
-        success: false,
-        message: 'Registro de YouTube no encontrado'
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      data: registro
-    });
+    res.status(200).json(record);
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: 'Error al obtener el registro de YouTube'
-    });
+    res.status(500).json({ message: 'Error al buscar el registro', error: error.message });
   }
 };
 
-const postYoutubeCompany = async (req, res) => {
+export const createYoutubeRecord = async (req, res) => {
   try {
-    const nuevoRegistro = new Youtube(req.body);
-    const registroGuardado = await nuevoRegistro.save();
-
-    return res.status(201).json({
-      success: true,
-      message: 'Registro de YouTube creado correctamente',
-      data: registroGuardado
+    const newRecord = await Youtube.create(req.body);
+    res.status(201).json({
+      message: 'Registro de canal de YouTube creado correctamente',
+      data: newRecord
     });
   } catch (error) {
-    if (error.name === 'ValidationError') {
-      return res.status(400).json({
-        success: false,
-        message: 'Error de validacion',
-        errors: Object.values(error.errors).map((err) => err.message)
-      });
-    }
-
-    return res.status(500).json({
-      success: false,
-      message: 'Error al crear el registro de YouTube'
-    });
+    res.status(400).json({ message: 'Error al crear el registro', error: error.message });
   }
 };
 
-const putYoutubeCompany = async (req, res) => {
+export const updateYoutubeRecord = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({
-        success: false,
-        message: 'ID invalido'
-      });
-    }
-
-    const registroActualizado = await Youtube.findByIdAndUpdate(id, req.body, {
-      returnDocument: 'after',
+    const updatedRecord = await Youtube.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
       runValidators: true
     });
 
-    if (!registroActualizado) {
-      return res.status(404).json({
-        success: false,
-        message: 'Registro de YouTube no encontrado'
-      });
+    if (!updatedRecord) {
+      return res.status(404).json({ message: 'Registro no encontrado' });
     }
 
-    return res.status(200).json({
-      success: true,
-      message: 'Registro de YouTube actualizado correctamente',
-      data: registroActualizado
+    res.status(200).json({
+      message: 'Registro de canal de YouTube actualizado correctamente',
+      data: updatedRecord
     });
   } catch (error) {
-    if (error.name === 'ValidationError') {
-      return res.status(400).json({
-        success: false,
-        message: 'Error de validacion',
-        errors: Object.values(error.errors).map((err) => err.message)
-      });
-    }
-
-    return res.status(500).json({
-      success: false,
-      message: 'Error al actualizar el registro de YouTube'
-    });
+    res.status(400).json({ message: 'Error al actualizar el registro', error: error.message });
   }
 };
 
-const deleteYoutubeCompany = async (req, res) => {
+export const deleteYoutubeRecord = async (req, res) => {
   try {
-    const { id } = req.params;
+    const deletedRecord = await Youtube.findByIdAndDelete(req.params.id);
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({
-        success: false,
-        message: 'ID invalido'
-      });
+    if (!deletedRecord) {
+      return res.status(404).json({ message: 'Registro no encontrado' });
     }
 
-    const registroEliminado = await Youtube.findByIdAndDelete(id);
-
-    if (!registroEliminado) {
-      return res.status(404).json({
-        success: false,
-        message: 'Registro de YouTube no encontrado'
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      message: 'Registro de YouTube eliminado correctamente',
-      data: registroEliminado
+    res.status(200).json({
+      message: 'Registro de canal de YouTube eliminado correctamente',
+      data: deletedRecord
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: 'Error al eliminar el registro de YouTube'
-    });
+    res.status(500).json({ message: 'Error al eliminar el registro', error: error.message });
   }
-};
-
-const getYoutubeCompaniesByCountry = async (req, res) => {
-  try {
-    const { pais } = req.params;
-
-    const registros = await Youtube.find({
-      pais: { $regex: pais, $options: 'i' }
-    });
-
-    return res.status(200).json({
-      success: true,
-      count: registros.length,
-      data: registros
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: 'Error al filtrar registros de YouTube por pais'
-    });
-  }
-};
-
-export {
-  getAllYoutubeCompanies,
-  getYoutubeCompanyById,
-  postYoutubeCompany,
-  putYoutubeCompany,
-  deleteYoutubeCompany,
-  getYoutubeCompaniesByCountry
 };
